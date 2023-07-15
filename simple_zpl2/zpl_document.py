@@ -152,6 +152,17 @@ class _BaseZPL(object):
             data = data.replace('\n', '\&')
         return data
 
+    @staticmethod
+    def _hex_escape_field_data(data):
+        data = data.replace('_', '__')
+        new_data = ""
+        for c in data:
+            if c.isprintable():
+                new_data += c
+            else:
+                new_data += f"_{format(ord(c), 'x')}"
+        return new_data
+
     @_newline_after
     def _add_field_data(self, data_list, replace_newlines=False):
         """
@@ -166,6 +177,9 @@ class _BaseZPL(object):
             data = '^FS'.join(self._format_field_data(data, replace_newlines))
         else:
             data = self._format_field_data(data, replace_newlines)
+        if not data.isprintable():
+            self.zpl.append('^FH')
+            data = self._hex_escape_field_data(data)
         self.zpl.append('^FD{}^FS'.format(data))
 
     @_newline_after
