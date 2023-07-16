@@ -160,7 +160,7 @@ class _BaseZPL(object):
             if c.isprintable():
                 new_data += c
             else:
-                new_data += f"_{format(ord(c), 'x')}"
+                new_data += f"_{ord(c):02x}"
         return new_data
 
     @_newline_after
@@ -2248,7 +2248,7 @@ class ZPLDocument(_BaseZPL):
         self._add_line_color(line_color, True)
         self._add_int_value_in_range(corner_rounding, 'corner_rounding', 0, 8, True, False)
         self.zpl.append('^FS')
-        
+
     @_newline_after
     def add_graphic_diagnonal_line(self, width=1, height=1, border=1, line_color='B', orientation='L'):
         """
@@ -2268,7 +2268,7 @@ class ZPLDocument(_BaseZPL):
         self._add_line_color(line_color, True)
         self._add_value_in_list(orientation, 'orientation', ('L','R',), True)
         self.zpl.append('^FS')
-        
+
     @_newline_after
     def add_graphic_circle(self, diameter=3, border=1, color='B'):
         """
